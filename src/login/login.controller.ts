@@ -1,5 +1,5 @@
 import { Post, Controller, Body, Get, Render } from '@nestjs/common';
-import { LoginDto, LoginStatusDto } from './dtos';
+import { LoginCode, LoginDto, LoginStatusDto } from './dtos';
 
 @Controller('login')
 export class LoginController {
@@ -12,6 +12,9 @@ export class LoginController {
 
     @Post()
     async login(@Body() data: LoginDto): Promise<LoginStatusDto> {
-        return await new Promise(() => { return new LoginStatusDto(); });
+        const loginDto = new LoginStatusDto();
+        loginDto.code = LoginCode.Error;
+        loginDto.msg = '請輸入正確的帳號或密碼';
+        return await Promise.resolve(loginDto);
     }
 }
