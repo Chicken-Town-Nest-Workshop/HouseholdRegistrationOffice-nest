@@ -1,20 +1,23 @@
-import { Post, Controller, Body, Get, Render } from '@nestjs/common';
+import { Post, Controller, Body, Get, Render, Inject } from '@nestjs/common';
 import { LoginCode, LoginDto, LoginStatusDto } from './dtos';
+import { LoginServiceInterface } from './interfaces/login.service.interface';
 
 @Controller('login')
 export class LoginController {
 
+    constructor(
+        @Inject('LoginServiceInterface')
+        private loginService: LoginServiceInterface
+    ) { }
+
     @Get()
     @Render('index')
     root() {
-        return { message: 'Hello world!' };
+        return;
     }
 
     @Post()
     async login(@Body() data: LoginDto): Promise<LoginStatusDto> {
-        const loginDto = new LoginStatusDto();
-        loginDto.code = LoginCode.Error;
-        loginDto.msg = '請輸入正確的帳號或密碼';
-        return await Promise.resolve(loginDto);
+        return await this.loginService.login(data);
     }
 }
