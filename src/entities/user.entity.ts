@@ -24,6 +24,9 @@ export class UserEntity {
   @Column({ nullable: true })
   status: boolean;
 
+  @Column({ length: 255, nullable: true })
+  inhabitant_id: string;
+
   @OneToMany(() => SessionEntity, (session) => session.user)
   sessions: SessionEntity[];
 

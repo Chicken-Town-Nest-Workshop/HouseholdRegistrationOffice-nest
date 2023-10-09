@@ -207,6 +207,10 @@ export class HouseholdRegistrationOffice1696859141483 implements MigrationInterf
                     default: 'uuid_generate_v4()',
                 },
                 {
+                    name: 'inhabitant_id',
+                    type: 'uuid',
+                },
+                {
                     name: 'username',
                     type: 'varchar(50)',
                     isNullable: false,
