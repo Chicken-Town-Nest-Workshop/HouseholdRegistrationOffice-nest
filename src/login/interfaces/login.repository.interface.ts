@@ -1,6 +1,10 @@
-import { UserDto } from "../dtos/"
+
 
 export interface LoginRepositoryInterface {
-    // 根据用户名查找用户
-    findByUsername(username: string): Promise<UserDto>;
+    /**
+     * 使用者名稱查詢密碼
+     * 
+     * @param username 使用者名稱
+     */
+    findByUsername(username: string): string;
 }
