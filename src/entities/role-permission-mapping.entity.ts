@@ -9,7 +9,7 @@ export class RolePermissionMappingEntity {
   @PrimaryGeneratedColumn()
   mapping_id: number;
 
-  @ManyToOne(() => RoleEntity, (role) => role.roleMappings)
+  @ManyToOne(() => RoleEntity, (role) => role.role_id)
   role: RoleEntity;
 
   @ManyToOne(() => PermissionsEntity, (permission) => permission.permission_id)
