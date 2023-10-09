@@ -209,6 +209,7 @@ export class HouseholdRegistrationOffice1696859141483 implements MigrationInterf
                 {
                     name: 'inhabitant_id',
                     type: 'uuid',
+                    isNullable: true,
                 },
                 {
                     name: 'username',
