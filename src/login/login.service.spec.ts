@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LoginService } from './login.service';
-import { LoginRepositoryInterface } from './interfaces/login.repository.interface';
 import { LoginCode, LoginDto, LoginStatusDto } from './dtos';
 
 describe('LoginService', () => {
@@ -42,9 +41,10 @@ describe('LoginService', () => {
       const actual = await service.login(loginDto);
 
       expect(actual).toStrictEqual(loginStatus);
+      return;
     });
 
-    // case1
+    // case2
     it('user name is Chicken but password no match need return login error', async () => {
       const loginDto = new LoginDto();
       loginDto.userName = 'Chicken';
@@ -57,6 +57,21 @@ describe('LoginService', () => {
       const actual = await service.login(loginDto);
 
       expect(actual).toStrictEqual(loginStatus);
+      return;
+    });
+
+    // case3
+    it('user name is Dog throw exception no found user', async () => {
+      const loginDto = new LoginDto();
+      loginDto.userName = 'Dog';
+      loginDto.password = 'test1212';
+
+      await expect(() =>
+        service.login(loginDto),
+      ).rejects
+        .toThrowError('找不到使用者');
+
+      return;
     });
   });
 });
