@@ -4,8 +4,8 @@ import { AuthenticationDto, LoginCode, LoginDto, LoginStatusDto } from './dtos';
 import * as bcrypt from 'bcrypt';
 import { LoginRepositoryInterface } from './interfaces/login.repository.interface';
 import { JwtService } from '@nestjs/jwt';
-import { TokenEntity } from 'src/entities/token.entity';
-import { ClockServiceInterface } from 'src/clock/clock.service.interface';
+import { TokenEntity } from '../entities/token.entity';
+import { ClockServiceInterface } from '../clock/clock.service.interface';
 
 @Injectable()
 export class LoginService implements LoginServiceInterface {

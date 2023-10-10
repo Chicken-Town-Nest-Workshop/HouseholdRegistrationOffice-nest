@@ -3,36 +3,49 @@ import { LoginService } from './login.service';
 import { LoginCode, LoginDto, LoginStatusDto } from './dtos';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from '../constants';
+import { LoginRepositoryInterface } from './interfaces/login.repository.interface';
+import { ClockModule } from '../clock/clock.module';
+import { MockTypeOrmModule } from './mock-typeorm.module';
+import { UserEntity } from '../entities/user.entity';
 
 describe('LoginService', () => {
   let service: LoginService;
 
   beforeEach(async () => {
+    const mockLoginRepository: Partial<LoginRepositoryInterface> = {
+      findByUsername: jest.fn(async (username) => {
+        if (username === 'Chicken') {
+          return {
+            userId: '6ada84f9-c748-4863-aae6-de1d548b7108',
+            passwordHash: '$2b$10$ZjJXVtcSOOaHFT23JyC8t.vocu4u.cqs5K2klfLmRltssANNqFLBW',
+          };
+        } else {
+          throw new Error('找不到使用者');
+        }
+      }),
+      setToken: jest.fn(async (data) => {
+        return '6ada84f9-c748-4863-aae6-de1d548b7108';
+      }),
+      findByUserId: jest.fn(async (data) => {
+        return new UserEntity();
+      })
+    };
+
+
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        MockTypeOrmModule,
         JwtModule.register({
           global: true,
           secret: jwtConstants.secret,
           signOptions: { expiresIn: '60s' },
         }),
+        ClockModule
       ],
       providers: [LoginService,
         {
           provide: 'LoginRepositoryInterface',
-          useValue: {
-            findByUsername: jest.fn((username) => {
-              if (username === 'Chicken')
-                return {
-                  userId: '6ada84f9-c748-4863-aae6-de1d548b7108',
-                  passwordHash: '$2b$10$ZjJXVtcSOOaHFT23JyC8t.vocu4u.cqs5K2klfLmRltssANNqFLBW'
-                };
-              else
-                throw Error('找不到使用者');
-            }),
-            setToken: jest.fn((data) => {
-              return '6ada84f9-c748-4863-aae6-de1d548b7108';
-            }),
-          }
+          useValue: mockLoginRepository
         }],
     }).compile();
 
