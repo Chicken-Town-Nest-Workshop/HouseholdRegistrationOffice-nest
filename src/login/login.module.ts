@@ -5,7 +5,7 @@ import { LoginRepository } from './login.repository';
 import { EntitiesModule } from 'src/entities/entities.module';
 
 @Module({
-    imports: [EntitiesModule],
+    imports: [EntitiesModule,],
     controllers: [LoginController],
     providers: [
         {

@@ -7,10 +7,12 @@ import { AllExceptionsFilter } from './all-exceptions.filter';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi'
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from './constants';
+import { ClockModule } from './clock/clock.module';
 
 @Module({
   imports: [
-
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
@@ -39,7 +41,13 @@ import * as Joi from 'joi'
       },
       inject: [ConfigService],
     }),
-    LoginModule],
+    JwtModule.register({
+      global: true,
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '60s' },
+    }),
+    LoginModule,
+    ClockModule],
   controllers: [AppController],
   providers: [AppService,
     {

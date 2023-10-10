@@ -1,8 +1,9 @@
 import { UserEntity } from "src/entities/user.entity";
 import { LoginRepositoryInterface } from "./interfaces/login.repository.interface";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { UserInfoDto } from "./dtos";
+import { TokenEntity } from "src/entities/token.entity";
 
 export class LoginRepository implements LoginRepositoryInterface {
     private readonly _table: string = 'user_table';
@@ -14,13 +15,32 @@ export class LoginRepository implements LoginRepositoryInterface {
         'email',
         'status'
     ]
+    private readonly _tokenTable: string = 'token_table';
+    private readonly _tokenSchema: string[] = [
+        'token_id',
+        'user_id',
+        'token_type',
+        'token_value',
+        'expiration_time',
+        'one_time_token',
+        'one_time_token_disable'
+    ]
 
     constructor(
+        private readonly dataSource: DataSource,
         @InjectRepository(UserEntity)
         private readonly userDto: Repository<UserEntity>
     ) { }
 
+    async findByUserId(userId: string): Promise<UserEntity> {
+        const result = await this.userDto.findOne({
+            where: {
+                user_id: userId,
+            },
+        });
 
+        return result;
+    }
 
     async findByUsername(username: string): Promise<UserInfoDto> {
         const result = await this.userDto.findOne({
@@ -35,4 +55,20 @@ export class LoginRepository implements LoginRepositoryInterface {
         };
     }
 
+    async setToken(data: TokenEntity): Promise<string> {
+        const queryBuilder = this.dataSource
+            .getRepository(TokenEntity)
+            .createQueryBuilder(this._tokenTable);
+
+        const result = await queryBuilder
+            .insert()
+            .into(TokenEntity)
+            .values([data])
+            .returning(this._tokenSchema)
+            .updateEntity(true)
+            .execute();
+
+        const model = result.raw[0] as TokenEntity;
+        return model.one_time_token;
+    }
 }
