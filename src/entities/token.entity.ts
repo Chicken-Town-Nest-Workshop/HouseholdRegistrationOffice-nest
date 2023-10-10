@@ -19,4 +19,10 @@ export class TokenEntity {
 
   @Column({ nullable: false })
   expiration_time: Date;
+
+  @Column({ type: 'uuid', nullable: false, default: () => 'uuid_generate_v4()' })
+  one_time_token: string;
+
+  @Column({ type: 'boolean', nullable: false })
+  one_time_token_disable: boolean;
 }

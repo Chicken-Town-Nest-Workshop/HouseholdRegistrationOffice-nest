@@ -34,8 +34,12 @@ export class LoginService implements LoginServiceInterface {
 
     async login(data: LoginDto): Promise<LoginStatusDto> {
 
+        // 1.認證使用者
         const authentication = await this.userAuthentication(data);
 
+        // 2.生成JWT與一次性token寫入DB
+
+        // 3.回傳一次性token
 
         return authentication;
     }
