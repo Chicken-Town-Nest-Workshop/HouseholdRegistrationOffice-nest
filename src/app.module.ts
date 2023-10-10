@@ -7,10 +7,11 @@ import { AllExceptionsFilter } from './all-exceptions.filter';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi'
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from './constants';
 
 @Module({
   imports: [
-
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
@@ -38,6 +39,11 @@ import * as Joi from 'joi'
         };
       },
       inject: [ConfigService],
+    }),
+    JwtModule.register({
+      global: true,
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '60s' },
     }),
     LoginModule],
   controllers: [AppController],
