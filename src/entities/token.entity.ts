@@ -1,6 +1,6 @@
 // token.entity.ts
 
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
 
 @Entity('token_table')
@@ -9,6 +9,7 @@ export class TokenEntity {
   token_id: number;
 
   @ManyToOne(() => UserEntity, (user) => user.tokens)
+  @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
   @Column({ length: 50, nullable: false })

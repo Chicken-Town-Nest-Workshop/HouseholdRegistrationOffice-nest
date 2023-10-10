@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi'
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
+import { ClockModule } from './clock/clock.module';
 
 @Module({
   imports: [
@@ -45,7 +46,8 @@ import { jwtConstants } from './constants';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
     }),
-    LoginModule],
+    LoginModule,
+    ClockModule],
   controllers: [AppController],
   providers: [AppService,
     {

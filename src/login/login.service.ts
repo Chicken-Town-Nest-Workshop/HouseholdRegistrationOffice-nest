@@ -5,13 +5,16 @@ import * as bcrypt from 'bcrypt';
 import { LoginRepositoryInterface } from './interfaces/login.repository.interface';
 import { JwtService } from '@nestjs/jwt';
 import { TokenEntity } from 'src/entities/token.entity';
+import { ClockServiceInterface } from 'src/clock/clock.service.interface';
 
 @Injectable()
 export class LoginService implements LoginServiceInterface {
     constructor(
         @Inject('LoginRepositoryInterface')
         private loginRepo: LoginRepositoryInterface,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        @Inject('ClockServiceInterface')
+        private clockService: ClockServiceInterface,
     ) { }
 
     /**
@@ -56,8 +59,14 @@ export class LoginService implements LoginServiceInterface {
         tokenEntity.token_type = 'JWT';
         tokenEntity.token_value = jwt;
         tokenEntity.one_time_token_disable = false;
-        // tokenEntity.expiration_time=jwt;
 
+        const user = await this.loginRepo.findByUserId(userId);
+        tokenEntity.user = user;
+
+        const today = new Date(this.clockService.getDateTime());
+        const tomorrow = new Date(this.clockService.getDateTime());
+        tomorrow.setDate(today.getDate() + 1);
+        tokenEntity.expiration_time = tomorrow;
 
         return await this.loginRepo.setToken(tokenEntity);
     }

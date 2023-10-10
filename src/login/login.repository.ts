@@ -32,6 +32,16 @@ export class LoginRepository implements LoginRepositoryInterface {
         private readonly userDto: Repository<UserEntity>
     ) { }
 
+    async findByUserId(userId: string): Promise<UserEntity> {
+        const result = await this.userDto.findOne({
+            where: {
+                user_id: userId,
+            },
+        });
+
+        return result;
+    }
+
     async findByUsername(username: string): Promise<UserInfoDto> {
         const result = await this.userDto.findOne({
             where: {
