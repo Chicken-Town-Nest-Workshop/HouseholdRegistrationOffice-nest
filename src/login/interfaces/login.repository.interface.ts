@@ -1,3 +1,4 @@
+import { UserInfoDto } from "../dtos";
 
 
 export interface LoginRepositoryInterface {
@@ -6,5 +7,5 @@ export interface LoginRepositoryInterface {
      * 
      * @param username 使用者名稱
      */
-    findByUsername(username: string): string;
+    findByUsername(username: string): Promise<UserInfoDto>;
 }
