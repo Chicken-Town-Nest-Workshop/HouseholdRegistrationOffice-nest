@@ -12,7 +12,10 @@ describe('LoginService', () => {
         useValue: {
           findByUsername: jest.fn((username) => {
             if (username === 'Chicken')
-              return '$2b$10$ZjJXVtcSOOaHFT23JyC8t.vocu4u.cqs5K2klfLmRltssANNqFLBW';
+              return {
+                userId: '6ada84f9-c748-4863-aae6-de1d548b7108',
+                passwordHash: '$2b$10$ZjJXVtcSOOaHFT23JyC8t.vocu4u.cqs5K2klfLmRltssANNqFLBW'
+              };
             else
               throw Error('找不到使用者');
           })

@@ -10,7 +10,7 @@ import { UserRoleMappingEntity } from './user-role-mapping.entity';
 @Entity('user_table')
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
-  user_id: number;
+  user_id: string;
 
   @Column({ length: 50, nullable: false })
   username: string;

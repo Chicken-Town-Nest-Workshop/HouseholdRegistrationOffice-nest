@@ -11,10 +11,14 @@ export class LoginService implements LoginServiceInterface {
         private loginRepo: LoginRepositoryInterface
     ) { }
 
-    async login(data: LoginDto): Promise<LoginStatusDto> {
-
-        const userHash = await this.loginRepo.findByUsername(data.userName);
-        const isMatch = await bcrypt.compare(data.password, userHash);
+    /**
+     * 使用者認證
+     * @param data 
+     * @returns 
+     */
+    private async userAuthentication(data: LoginDto): Promise<LoginStatusDto> {
+        const userInfo = await this.loginRepo.findByUsername(data.userName);
+        const isMatch = await bcrypt.compare(data.password, userInfo.passwordHash);
 
         const loginStatus = new LoginStatusDto();
         if (isMatch) {
@@ -26,5 +30,13 @@ export class LoginService implements LoginServiceInterface {
             loginStatus.msg = '帳號或密碼不正確';
             return loginStatus;
         }
+    }
+
+    async login(data: LoginDto): Promise<LoginStatusDto> {
+
+        const authentication = await this.userAuthentication(data);
+
+
+        return authentication;
     }
 }

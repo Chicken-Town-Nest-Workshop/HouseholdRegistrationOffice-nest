@@ -6,7 +6,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './all-exceptions.filter';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import Joi from 'joi';
+import * as Joi from 'joi'
 
 @Module({
   imports: [

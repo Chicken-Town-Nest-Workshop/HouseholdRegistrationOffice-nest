@@ -87,9 +87,15 @@
                 body: JSON.stringify(data)
             })
                 .then(response => {
-                    console.log(response);
                     if (response.ok) {
-                        return response.json();
+                        // 登入成功，檢查是否有重定向
+                        //const redirectUrl = response.headers.get("Location");
+                        const redirectUrl = response.url;
+                        if (redirectUrl) {
+                            window.location.href = redirectUrl;
+                        } else {
+                            return response.json();
+                        }
                     } else {
                         displayErrorMessage("登入失敗");
                         throw new Error("登入失敗");
@@ -98,6 +104,7 @@
                 .then(result => {
                     console.log(result);
                     if (result.code === '00000') {
+                        // 登入成功
                     } else if (result.code === '99999') {
                         displayErrorMessage(result.msg);
                         console.error("登入失敗 : " + result.msg);
@@ -113,6 +120,7 @@
             const errorMessageElement = document.getElementById("error-message");
             errorMessageElement.textContent = message;
         }
+
     </script>
 </body>
 
